@@ -4,12 +4,13 @@ class Board:
 
     def create_board(self):
 
-        board = [["" for _ in range(8)] for _ in range(8)] 
+        board = [["" for _ in range(8)] for _ in range(8)] # Initialise empty 8x8 board
 
-        board[7] = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']  # Black pieces
-        board[6] = ['P'] * 8  # Black pawns
-        board[1] = ['p'] * 8  # White pawns
-        board[0] = ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']  # White pieces
+        board[7] = ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']  # White pieces
+        board[6] = ['P'] * 8  # White pawns
+        board[1] = ['p'] * 8  # Black pawns
+        board[0] = ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']  # Black pieces
+        
         return board
 
     
