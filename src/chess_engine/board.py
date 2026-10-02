@@ -51,3 +51,21 @@ class Board:
         self.board[start_row][start_column] = start_piece
         self.board[end_row][end_column] = destination_piece
 
+
+    def get_knight_moves(self,row,col):
+        possible_positions = [(2+row,1+col),(2+row,-1+col),(1+row,2+col),(1+row,-2+col),(-2+row,-1+col),(-1+row,-2+col),(-2+row,1+col),(-1+row,2+col)]
+        knight = self.board[row][col]
+        valid = []
+
+        for element in possible_positions:
+            r,c = element
+            if 0<= r <= 7 and 0<=  c <=7:
+                piece = self.board[r][c]
+                if (piece.isupper() and knight.islower()) or (piece.islower() and knight.isupper() or piece==""):
+                    valid.append(element)
+        return valid
+
+        
+            
+        
+
