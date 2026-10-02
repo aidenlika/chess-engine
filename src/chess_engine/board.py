@@ -65,7 +65,27 @@ class Board:
                     valid.append(element)
         return valid
 
-        
-            
-        
+    def get_rook_moves(self,row,col):
+        directions = [(0,1),(0,-1),(-1,0),(1,0)] #right,left, up, down
+        valid = []
+        rook = self.board[row][col]
+        for element in directions:
+            r,c = element
+            rowchange = row+r
+            colchange = col +c
+            while 0<=(rowchange)<=7 and 0<=(colchange)<=7:
+                piece = self.board[rowchange][colchange]
+                if piece =="":
+                    valid.append((rowchange,colchange))
+                    rowchange+=r
+                    colchange+=c
+                    
+                elif (piece.islower() and rook.isupper() or (piece.isupper() and rook.islower())):
+                    valid.append((rowchange,colchange))
+                    break
+                elif (piece.islower() and rook.islower() or (piece.isupper() and rook.isupper())):
+                    break
+        return valid
 
+
+                

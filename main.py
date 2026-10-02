@@ -3,7 +3,5 @@ from src.chess_engine.move import Move
 
 
 board = Board()
-board.create_board()
-board.board[5][0] = "P"
-board.board[5][0] = "p"
-print(board.get_knight_moves(7,1))
+board.board[1][7] = ""
+print(board.get_rook_moves(0,7))
