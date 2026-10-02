@@ -1,6 +1,7 @@
 class Board:
     def __init__(self):
         self.board = self.create_board()
+        self.move_history = []
 
     def create_board(self):
 
@@ -28,6 +29,25 @@ class Board:
         for k in displayed:
             print(" ".join(k))
 
-    
-boardd = Board()
-boardd.display()
+    def make_move(self, move):
+        to_be_moved_row,to_be_moved_column = move.start # Unpack tuples of original piece position
+        start_piece = self.board[to_be_moved_row][to_be_moved_column]
+       
+        
+        new_pos_row,new_pos_column = move.end   # Unpack tuples of position to move piece to
+        destination_piece = self.board[new_pos_row][new_pos_column]
+        self.move_history.append((move,start_piece,destination_piece))
+        
+        self.board[to_be_moved_row][to_be_moved_column] = ""
+        self.board[new_pos_row][new_pos_column] = start_piece
+
+    def undo_move(self):
+        if not self.move_history:
+            return
+        move, start_piece, destination_piece = self.move_history.pop()
+        
+        start_row,start_column = move.start
+        end_row,end_column = move.end
+        self.board[start_row][start_column] = start_piece
+        self.board[end_row][end_column] = destination_piece
+
