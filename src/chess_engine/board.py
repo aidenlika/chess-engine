@@ -87,5 +87,84 @@ class Board:
                     break
         return valid
 
+    def get_bishop_moves(self,row,col):
+        directions = [(1,1),(-1,-1),(-1,1),(1,-1)]
+        valid = []
+        bishop = self.board[row][col]
+        for element in directions:
+            r,c = element
+            rowchange = row+r
+            colchange = col+c
+            while 0<=(rowchange)<=7 and 0<=(colchange)<=7:
+                piece = self.board[rowchange][colchange]
+                if piece == "":
+                    valid.append((rowchange,colchange))
+                    rowchange +=r
+                    colchange +=c
+                elif (piece.islower() and bishop.isupper() or (piece.isupper() and bishop.islower())):
+                    valid.append((rowchange,colchange))
+                    break
+                elif (piece.islower() and bishop.islower() or (piece.isupper() and bishop.isupper())):
+                    break
+        return valid
+
+
+    def get_queen_moves(self,row,col):
+        bishop = self.get_bishop_moves(row,col)
+        rook = (self.get_rook_moves(row,col))
+        return bishop + rook
+
+    def get_king_moves(self,row,col):
+        possible_positions = [(1+row,0+col),(1+row,1+col),(0+row,1+col),(-1+row,1+col),(0+row,-1+col),(-1+row,-1+col),(1+row,-1+col),(-1+row,0+col)]
+        king = self.board[row][col]
+        valid = []
+
+        for element in possible_positions:
+            r,c = element
+            if 0<= r <= 7 and 0<=  c <=7:
+                piece = self.board[r][c]
+                if (piece.isupper() and king.islower()) or (piece.islower() and king.isupper() or piece==""):
+                    valid.append(element)
+        return valid
+
+    def get_pawn_moves(self,row,col):
+        valid = []
+        pawn = self.board[row][col]
+        direction = -1 if pawn.isupper() else 1
+        two_forward= row + 2*direction
+        one_forward = row + direction
+        if 0<=one_forward<=7 and self.board[one_forward][col] == "" :
+            valid.append((one_forward,col))
+        if (pawn.isupper() and row== 6) or (pawn.islower() and row == 1):
+            if (one_forward,col) in valid and (self.board[two_forward][col]==""):
+                valid.append((two_forward,col))
+
+        #pawn captures
+        diagonals = [(direction+row,1+col),(direction+row,-1+col)] 
+        for element in diagonals:
+            r,c = element
+            if not (0<=r<=7) or not(0<=c<=7):
+                continue
+                
+            if self.board[r][c] =="":
+                continue
+            elif self.board[r][c].isupper() and pawn.islower() or( self.board[r][c].islower() and pawn.isupper()):
+                valid.append((r,c))
+        return valid
+
+
+
+
+
+
+
+
+
+        
+        
+
+
+            
+
 
                 
