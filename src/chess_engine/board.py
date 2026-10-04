@@ -1,7 +1,9 @@
+from src.chess_engine.move import Move
 class Board:
     def __init__(self):
         self.board = self.create_board()
         self.move_history = []
+        self.white_to_move = True
 
     def create_board(self):
 
@@ -151,6 +153,35 @@ class Board:
             elif self.board[r][c].isupper() and pawn.islower() or( self.board[r][c].islower() and pawn.isupper()):
                 valid.append((r,c))
         return valid
+
+    def get_piece_moves(self,row,col):
+        pieces ={
+            "P":self.get_pawn_moves,
+            "Q":self.get_queen_moves,
+            "R":self.get_rook_moves,
+            "B":self.get_bishop_moves,
+            "K":self.get_king_moves,
+            "N":self.get_knight_moves
+        }
+        if self.board[row][col] =="":
+            return []
+        
+        selected = self.board[row][col].upper()
+        return pieces[selected](row,col)
+
+
+    def get_all_moves(self):
+        result = []
+        for rowIndex, row in enumerate (self.board):
+            for colIndex, piece in enumerate(row):
+                if self.white_to_move and piece.isupper() or ( not self.white_to_move and piece.islower()):
+                    destinations = self.get_piece_moves(rowIndex, colIndex)
+                    for i in destinations:
+                        x = Move((rowIndex,colIndex),i)
+                        result.append(x)
+        return result
+
+
 
 
 
