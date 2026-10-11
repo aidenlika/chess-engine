@@ -42,6 +42,7 @@ class Board:
         
         self.board[to_be_moved_row][to_be_moved_column] = ""
         self.board[new_pos_row][new_pos_column] = start_piece
+        self.white_to_move = not self.white_to_move
 
     def undo_move(self):
         if not self.move_history:
@@ -52,6 +53,8 @@ class Board:
         end_row,end_column = move.end
         self.board[start_row][start_column] = start_piece
         self.board[end_row][end_column] = destination_piece
+        self.white_to_move = not self.white_to_move
+
 
 
     def get_knight_moves(self,row,col):
@@ -180,6 +183,23 @@ class Board:
                         x = Move((rowIndex,colIndex),i)
                         result.append(x)
         return result
+
+
+    def is_square_attacked(self,row,col,by_white):
+        direction = -1 if by_white else 1
+        pawn = "P" if by_white else "p"
+        pawn_row = row - direction
+        possible_pawn_attacks = [(pawn_row,col-1),(pawn_row,col+1)]
+        for elem in possible_pawn_attacks:
+            r,c = elem
+            if 0<=r<=7 and 0<=c<=7:
+                target = self.board[r][c]
+                if target == pawn:
+                    return True
+
+        
+        return False
+
 
 
 
