@@ -186,6 +186,7 @@ class Board:
 
 
     def is_square_attacked(self,row,col,by_white):
+
         direction = -1 if by_white else 1
         pawn = "P" if by_white else "p"
         pawn_row = row - direction
@@ -197,17 +198,94 @@ class Board:
                 if target == pawn:
                     return True
 
-        
+        knight = "N" if by_white else "n"
+
+        possible_knight_attacks = [(2+row,1+col),(2+row,-1+col),(1+row,2+col),(1+row,-2+col),(-2+row,-1+col),(-1+row,-2+col),(-2+row,1+col),(-1+row,2+col)]
+        for x in possible_knight_attacks:
+            r,c = x
+            if 0<=r<=7 and 0<=c<=7:
+                target = self.board[r][c]
+                if target == knight:
+                    return True
+
+
+        king = "K" if by_white else "k"
+        possible_king_attacks = [(1+row,0+col),(1+row,1+col),(0+row,1+col),(-1+row,1+col),(0+row,-1+col),(-1+row,-1+col),(1+row,-1+col),(-1+row,0+col)]
+        for i in possible_king_attacks:
+            r,c = i
+            if 0<=r<=7 and 0<=c<=7:
+                target = self.board[r][c]
+                if target == king:
+                    return True
+
+
+        rook = "R" if by_white else "r"
+        queen = "Q" if by_white else "q"
+        directions = [(0,1),(1,0),(-1,0),(0,-1)]
+        for element in directions:
+            r,c = element
+            rowchange = row+r
+            colchange = col +c
+            while 0<=(rowchange)<=7 and 0<=(colchange)<=7:
+                piece = self.board[rowchange][colchange]
+                if piece =="":
+                    rowchange+=r
+                    colchange+=c
+                elif piece in (rook,queen):
+                    return True
+                else:
+                    break
+
+        bishop = "B" if by_white else "b"
+        b_directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+        for element in b_directions:
+            r,c = element
+            rowchange = row+r
+            colchange = col + c
+            while 0<=(rowchange)<=7 and 0<=(colchange)<=7:
+                piece = self.board[rowchange][colchange]
+                if piece =="":
+                    rowchange+=r
+                    colchange+=c
+                elif piece in (bishop,queen):
+                    return True
+                else:
+                    break    
         return False
 
 
+    def in_check(self, white_to_check=None):
+        if white_to_check is None:
+            white_to_check = self.white_to_move
+
+        king = "K" if white_to_check else "k"
+        by_white = not white_to_check
+
+        for row_index, row in enumerate(self.board):
+            for col_index, piece in enumerate(row):
+                if piece == king:
+                    return self.is_square_attacked(
+                        row_index, col_index, by_white
+                    )
+
+        raise ValueError(f"King not found: {'White' if white_to_check else 'Black'}")
+
+
+    def get_legal_moves(self):
+        legal_moves = []
+        candidate_moves = self.get_all_moves()
+        moving_side = self.white_to_move
+
+        for move in candidate_moves:
+            self.make_move(move)
+            if not self.in_check(moving_side):
+                legal_moves.append(move)
 
 
 
+            self.undo_move()
 
-
-
-
+        return legal_moves
 
 
 
