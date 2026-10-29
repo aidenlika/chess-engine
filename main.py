@@ -3,27 +3,20 @@ from src.chess_engine.board import Board
 board = Board()
 board.board = [["" for _ in range(8)] for _ in range(8)]
 board.move_history = []
-board.white_to_move = True
+board.white_to_move = False
 
-board.board[0][0] = "k"
-board.board[0][4] = "r"
-board.board[6][4] = "R"
-board.board[7][4] = "K"
+board.board[0][7] = "k"
+board.board[7][7] = "K"
+board.board[6][0] = "p"
 
-legal_moves = board.get_legal_moves()
-
-pinned_move = any(
-    move.start == (6, 4) and move.end == (6, 3)
-    for move in legal_moves
+move = next(
+    move for move in board.get_all_moves()
+    if move.start == (6, 0) and move.end == (7, 0)
 )
 
-blocking_move = any(
-    move.start == (6, 4) and move.end == (5, 4)
-    for move in legal_moves
-)
+board.make_move(move)
+print(board.board[7][0])  # q
 
-print("Pinned sideways move:", pinned_move)
-print("Move maintaining the block:", blocking_move)
-print("Board restored:", board.board[6][4] == "R")
-print("Turn restored:", board.white_to_move)
-print("History empty:", len(board.move_history) == 0)
+board.undo_move()
+print(board.board[6][0])  # p
+print(board.white_to_move)  # False

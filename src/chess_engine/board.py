@@ -41,6 +41,10 @@ class Board:
         self.move_history.append((move,start_piece,destination_piece))
         
         self.board[to_be_moved_row][to_be_moved_column] = ""
+        if start_piece == "P" and new_pos_row == 0:
+            start_piece = "Q"
+        elif start_piece == "p" and new_pos_row == 7:
+            start_piece = "q"
         self.board[new_pos_row][new_pos_column] = start_piece
         self.white_to_move = not self.white_to_move
 
@@ -286,6 +290,16 @@ class Board:
             self.undo_move()
 
         return legal_moves
+
+    def is_checkmate(self):
+        if self.in_check() and not self.get_legal_moves():
+            return True
+        else:
+            return False
+
+    def is_stalemate(self):
+        return not self.get_legal_moves() and not self.in_check()
+
 
 
 
